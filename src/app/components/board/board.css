@@ -1,0 +1,11 @@
+.grid { display: grid; gap: .5rem; }
+.cell {
+  aspect-ratio: 1/1;
+  min-width: 64px;
+  font-size: 2rem; font-weight: 700;
+  border: 1px solid #ddd; border-radius: .5rem;
+  background: white; cursor: pointer;
+  transition: transform .05s ease;
+}
+.cell:active { transform: scale(0.98); }
+.cell:disabled { cursor: default; background: #f7f7f7; }

@@ -1,0 +1,6 @@
+.container { max-width: 640px; margin: 2rem auto; padding: 0 1rem; }
+h1 { text-align: center; margin-bottom: 1rem; }
+.controls {
+  display: flex; gap: .75rem; justify-content: center; margin-bottom: .5rem;
+}
+.status { text-align: center; font-weight: 600; margin: .5rem 0 1rem; }

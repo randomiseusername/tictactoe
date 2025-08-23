@@ -1,0 +1,9 @@
+<div class="grid" [style.gridTemplateColumns]="'repeat(' + n + ', 1fr)'">
+  <button
+    *ngFor="let cell of board; index as i; trackBy: trackByIndex"
+    class="cell"
+    [disabled]="disabled || cell !== null"
+    (click)="cellClick.emit(i)">
+    {{ cell || '' }}
+  </button>
+</div>
