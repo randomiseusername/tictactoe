@@ -1,0 +1,10 @@
+<div class="controls">
+  <fieldset [disabled]="status==='playing'">
+    <legend>Je commence avec :</legend>
+    <label><input type="radio" name="mark" [(ngModel)]="localChoice" value="X"> X</label>
+    <label><input type="radio" name="mark" [(ngModel)]="localChoice" value="O"> O</label>
+  </fieldset>
+
+  <button (click)="startGame()" [disabled]="status==='playing'">Commencer</button>
+  <button (click)="replay.emit()" [disabled]="status==='idle'">Rejouer</button>
+</div>

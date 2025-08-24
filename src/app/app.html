@@ -1,13 +1,18 @@
 <div class="container">
   <h1>TicTacToe</h1>
 
-  <div class="controls">
-    <button (click)="startAs('X')" [disabled]="game.status()==='playing'">Start as X</button>
-    <button (click)="startAs('O')" [disabled]="game.status()==='playing'">Start as O</button>
-    <button (click)="replay()"     [disabled]="game.status()==='idle'">Rejouer</button>
-  </div>
+  <app-controls
+    [playerStarts]="game.playerStarts()"
+    [status]="game.status()"
+    (start)="onStart($event)"
+    (replay)="onReplay()">
+  </app-controls>
 
-  <p class="status">{{ statusText }}</p>
+  <app-status-bar
+    [status]="game.status()"
+    [current]="game.current()"
+    [winner]="game.winner()">
+  </app-status-bar>
 
   <app-board
     [n]="game.size"
