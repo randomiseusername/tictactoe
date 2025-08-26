@@ -14,7 +14,18 @@ import { StatusBarComponent } from './components/status-bar/status-bar';
 export class AppComponent {
   game = inject(GameStoreService);
 
-  onStart(mark: 'X'|'O') { this.game.setPlayerStarts(mark); this.game.start(); }
+  // expect payload { mark, mode } from ControlsComponent
+  // Handle the start event emitted by the controls component.
+  // The controls component emits a single payload object { mark, mode } to
+  // keep the API compact.
+  onStart(payload: { mark: 'X'|'O'; mode: 'single' | 'two' }) {
+    
+    this.game.setMode(payload.mode); // Persist the selected play mode (single-player or two-player).
+    
+    this.game.setPlayerStarts(payload.mark); // Configure which mark the local player starts with (X or O).
+    this.game.start();
+  }
+
   onReplay() { this.game.start(); }
   onCell(i: number) { this.game.playHuman(i); }
 }

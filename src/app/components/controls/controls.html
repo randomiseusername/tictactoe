@@ -1,10 +1,19 @@
 <div class="controls">
+  <!-- Player mark selection: choose whether the human plays X or O. -->
   <fieldset [disabled]="status==='playing'">
     <legend>Je commence avec :</legend>
     <label><input type="radio" name="mark" [(ngModel)]="localChoice" value="X"> X</label>
     <label><input type="radio" name="mark" [(ngModel)]="localChoice" value="O"> O</label>
   </fieldset>
 
+  <!-- Mode selection: 'single' enables AI opponent, 'two' is local two-player. -->
+  <fieldset [disabled]="status==='playing'">
+    <legend>Mode de jeu :</legend>
+    <label><input type="radio" name="mode" [(ngModel)]="localMode" value="single"> Solo (IA)</label>
+    <label><input type="radio" name="mode" [(ngModel)]="localMode" value="two"> Deux joueurs</label>
+  </fieldset>
+
+  <!-- Emit a single payload object { mark, mode } when starting. -->
   <button (click)="startGame()" [disabled]="status==='playing'">Commencer</button>
   <button (click)="replay.emit()" [disabled]="status==='idle'">Rejouer</button>
 </div>

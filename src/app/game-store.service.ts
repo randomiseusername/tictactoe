@@ -11,11 +11,18 @@ export class GameStoreService {
 
   board = signal<Cell[]>(Array(this.n * this.n).fill(null));
   current = signal<Mark>('X');
+  // 'mode' holds whether the game is single-player (AI) or two-player.
+  mode = signal<'single' | 'two'>('single');
+  // 'status' tracks the game lifecycle: 'idle' | 'playing' | 'won' | 'draw'
   status  = signal<Status>('idle');
+  // 'winner' is set when a player wins; undefined otherwise.
   winner  = signal<Mark | undefined>(undefined);
-  playerStarts = signal<Mark>('X'); // choisi dans l’UI
+  // 'playerStarts' stores which mark the local human player has chosen to start.
+  playerStarts = signal<Mark>('X'); // chosen by the UI
 
   setPlayerStarts(m: Mark) { this.playerStarts.set(m); }
+  // Set the game mode. Call this before 'start()' to ensure correct behavior.
+  setMode(m: 'single' | 'two') { this.mode.set(m); }
 
   start() {
     this.board.set(Array(this.n * this.n).fill(null));
@@ -23,8 +30,11 @@ export class GameStoreService {
     this.status.set('playing');
     this.winner.set(undefined);
 
-    // if player 'O' then computer (X) starts
-    if (this.current() === 'O') this.computerTurn();
+    // If the selected mode is single-player and the computer should start
+    // (human chose 'O'), immediately run the computer's turn.
+    if (this.current() === 'O' && this.mode() === 'single') {
+      this.computerTurn();
+    }
   }
 
   playHuman(i: number) {
@@ -36,7 +46,8 @@ export class GameStoreService {
     if (this.tryFinish()) return;   // check for win/draw
 
     this.switch();
-    this.computerTurn();
+  // Only invoke the AI after a human move when in single-player mode.
+  if (this.mode() === 'single') { this.computerTurn(); }
   }
 
   // ---- internals ----
