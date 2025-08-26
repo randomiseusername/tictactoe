@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StatusBar } from './status-bar';
+import { StatusBarComponent } from './status-bar';
 
-describe('StatusBar', () => {
-  let component: StatusBar;
-  let fixture: ComponentFixture<StatusBar>;
+describe('StatusBarComponent', () => {
+  let component: StatusBarComponent;
+  let fixture: ComponentFixture<StatusBarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [StatusBar]
+      imports: [StatusBarComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(StatusBar);
+    fixture = TestBed.createComponent(StatusBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
