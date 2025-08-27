@@ -2,22 +2,22 @@
   <h1>TicTacToe</h1>
 
   <app-controls
-    [playerStarts]="game.playerStarts()"
-    [status]="game.status()"
+  [startingPlayer]="game.startingPlayer()"
+  [status]="game.status()"
     (start)="onStart($event)"
     (replay)="onReplay()">
   </app-controls>
 
   <app-status-bar
-    [status]="game.status()"
-    [current]="game.current()"
+  [status]="game.status()"
+  [current]="game.currentPlayer()"
     [winner]="game.winner()">
   </app-status-bar>
 
   <app-board
-    [n]="game.size"
-    [board]="game.board()"
-    [disabled]="game.status()!=='playing'"
+  [n]="game.size"
+  [board]="game.boardState()"
+  [disabled]="game.status()!=='playing'"
     (cellClick)="onCell($event)">
   </app-board>
 </div>

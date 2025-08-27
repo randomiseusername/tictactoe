@@ -3,6 +3,11 @@
   gap: .75rem; align-items: center; justify-content: center;
   margin-bottom: .75rem;
 }
-fieldset { border: 1px solid #ddd; padding: .5rem .75rem; border-radius: .5rem; }
-button { padding: .5rem .9rem; border-radius: .5rem; border: 1px solid #ccc; cursor: pointer; }
+fieldset { border: 1px solid rgba(255,255,255,0.04); padding: .5rem .75rem; border-radius: .5rem; background: rgba(255,255,255,0.02); }
+label { margin-right: .5rem; color: var(--muted); }
+button {
+  padding: .5rem .9rem; border-radius: .5rem; border: 1px solid rgba(255,255,255,0.06);
+  background: linear-gradient(180deg,var(--accent), #ffdff0); color: #0b0720; font-weight:700;
+  cursor: pointer;
+}
 button:disabled { opacity: .5; cursor: not-allowed; }

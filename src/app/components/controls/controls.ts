@@ -10,7 +10,9 @@ import type { Status, Mark } from '../../game/game.types';
   styleUrls: ['./controls.css'],
 })
 export class ControlsComponent {
-  @Input() playerStarts: Mark = 'X';
+  
+  @Input() startingPlayer: Mark = 'X';
+  
   @Input() status: Status = 'idle';
   // Output event: emits a compact payload object containing the selected mark
   // and the desired game mode. Using a single payload.
@@ -19,12 +21,13 @@ export class ControlsComponent {
   @Output() replay = new EventEmitter<void>(); // Replay event: parent component will restart the game when received.
 
 
-  localChoice: Mark = this.playerStarts;
+  // Initialize local choice from startingPlayer input
+  localChoice: Mark = this.startingPlayer;
   
   localMode: 'single' | 'two' = 'single';
 
   // Keep localChoice in sync with an incoming 'playerStarts' input.
-  ngOnChanges() { this.localChoice = this.playerStarts; }
+  ngOnChanges() { this.localChoice = this.startingPlayer; }
   
   // Called when the user clicks the "Commencer" button. Emit the selected
   // configuration so the parent (AppComponent) can persist it and start the game.

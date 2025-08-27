@@ -19,15 +19,16 @@ export class AppComponent {
   // The controls component emits a single payload object { mark, mode } to
   // keep the API compact.
   onStart(payload: { mark: 'X'|'O'; mode: 'single' | 'two' }) {
-    
-    this.game.setMode(payload.mode); // Persist the selected play mode (single-player or two-player).
-    
-    this.game.setPlayerStarts(payload.mark); // Configure which mark the local player starts with (X or O).
+    // Persist the selected play mode (single-player or two-player).
+    this.game.setGameMode(payload.mode);
+    // Configure which mark the local player starts with (X or O).
+    this.game.setStartingPlayer(payload.mark);
+    // Start a new game using the configured options.
     this.game.start();
   }
 
   onReplay() { this.game.start(); }
-  onCell(i: number) { this.game.playHuman(i); }
+  onCell(cellIndex: number) { this.game.playHuman(cellIndex); }
 }
 
 

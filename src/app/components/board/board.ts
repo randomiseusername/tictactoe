@@ -10,8 +10,8 @@ import type { Cell } from '../../game/game.types';
   styleUrl: './board.css',
 })
 export class BoardComponent {
-  @Input({ required: true }) n!: number;
-  @Input({ required: true }) board!: Cell[];
+  @Input({ required: true }) n!: number; 
+  @Input({ required: true }) board!: Cell[]; 
   @Input() disabled = false;
   @Output() cellClick = new EventEmitter<number>();
 

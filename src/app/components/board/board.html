@@ -3,7 +3,9 @@
     *ngFor="let cell of board; index as i; trackBy: trackByIndex"
     class="cell"
     [disabled]="disabled || cell !== null"
+    [class.mark-x]="cell === 'X'"
+    [class.mark-o]="cell === 'O'"
     (click)="cellClick.emit(i)">
-    {{ cell || '' }}
+    {{ cell ?? '' }}
   </button>
 </div>

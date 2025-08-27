@@ -5,77 +5,90 @@ import { randomMove } from './game/game.ai';
 
 @Injectable({ providedIn: 'root' })
 export class GameStoreService {
-  // configurables constants for later improvements
-  private readonly n = 3; // board size
-  private readonly k = 3; // alignment 
+  // Configurable constants for later improvements
+  private readonly boardSize = 5; // board size (n x n)
+  private readonly winLength = 3; // number of aligned marks required to win
 
-  board = signal<Cell[]>(Array(this.n * this.n).fill(null));
-  current = signal<Mark>('X');
-  // 'mode' holds whether the game is single-player (AI) or two-player.
-  mode = signal<'single' | 'two'>('single');
+  // Reactive state signals
+  boardState = signal<Cell[]>(Array(this.boardSize * this.boardSize).fill(null));
+  currentPlayer = signal<Mark>('X');
+  // 'gameMode' holds whether the game is single-player (AI) or two-player.
+  gameMode = signal<'single' | 'two'>('single');
   // 'status' tracks the game lifecycle: 'idle' | 'playing' | 'won' | 'draw'
   status  = signal<Status>('idle');
   // 'winner' is set when a player wins; undefined otherwise.
   winner  = signal<Mark | undefined>(undefined);
-  // 'playerStarts' stores which mark the local human player has chosen to start.
-  playerStarts = signal<Mark>('X'); // chosen by the UI
+  // 'startingPlayer' stores which mark the local human player has chosen to start.
+  startingPlayer = signal<Mark>('X'); // chosen by the UI
 
-  setPlayerStarts(m: Mark) { this.playerStarts.set(m); }
-  // Set the game mode. Call this before 'start()' to ensure correct behavior.
-  setMode(m: 'single' | 'two') { this.mode.set(m); }
+  // Public API to update configuration
+  setStartingPlayer(m: Mark) { this.startingPlayer.set(m); }
+  // Set the game mode. Call this before 'startGame()' to ensure correct behavior.
+  setGameMode(m: 'single' | 'two') { this.gameMode.set(m); }
 
   start() {
-    this.board.set(Array(this.n * this.n).fill(null));
-    this.current.set(this.playerStarts());
+  // Reset board and state
+  this.boardState.set(Array(this.boardSize * this.boardSize).fill(null));
     this.status.set('playing');
     this.winner.set(undefined);
 
-    // If the selected mode is single-player and the computer should start
-    // (human chose 'O'), immediately run the computer's turn.
-    if (this.current() === 'O' && this.mode() === 'single') {
+    // Decide who plays first:
+    // - In two-player mode the selected player always starts.
+    // - In single-player mode, if the human chose 'O' the computer plays first.
+    if (this.gameMode() === 'single' && this.startingPlayer() === 'O') {
+      // computer should start as 'X' and immediately take its turn
+      this.currentPlayer.set('X');
       this.computerTurn();
+    } else {
+      // human starts with their chosen mark
+      this.currentPlayer.set(this.startingPlayer());
     }
   }
 
-  playHuman(i: number) {
+  playHuman(cellIndex: number) {
     if (this.status() !== 'playing') return; // finished game
-    const b = this.board();
-    if (b[i] !== null) return;  // cell already taken
+    const b = this.boardState();
+    if (b[cellIndex] !== null) return;  // cell already taken
 
-    this.place(i, this.current());  // place the mark
-    if (this.tryFinish()) return;   // check for win/draw
+    // Place the human's mark in the chosen cell
+    this.place(cellIndex, this.currentPlayer());
+    if (this.tryFinish()) return;   // stop if game finished
 
+    // Switch turn to the other player
     this.switch();
-  // Only invoke the AI after a human move when in single-player mode.
-  if (this.mode() === 'single') { this.computerTurn(); }
+
+    // Only invoke the AI after a human move when in single-player mode.
+    if (this.gameMode() === 'single') {
+      this.computerTurn();
+    }
   }
 
   // ---- internals ----
   private computerTurn() {
     if (this.status() !== 'playing') return;
-    const i = randomMove(this.board()); // AI chooses free spot
-    if (i < 0) return; // no more cells
-    this.place(i, this.current());
+    const chosenIndex = randomMove(this.boardState()); // AI chooses free spot
+    if (chosenIndex < 0) return; // no more cells
+    this.place(chosenIndex, this.currentPlayer());
     if (this.tryFinish()) return;
     this.switch();
   }
 
-  private place(i: number, mark: Mark) {
-    const b = this.board().slice();  // create a copy of the board
-    b[i] = mark;
-    this.board.set(b);
+  private place(cellIndex: number, mark: Mark) {
+    const b = this.boardState().slice();  // create a copy of the board
+    b[cellIndex] = mark;
+    this.boardState.set(b);
   }
 
-  private switch() { this.current.set(this.current() === 'X' ? 'O' : 'X'); }
+  private switch() { this.currentPlayer.set(this.currentPlayer() === 'X' ? 'O' : 'X'); }
 
   private tryFinish(): boolean {
-    const w = checkWin(this.board(), this.n, this.k);
+  const w = checkWin(this.boardState(), this.boardSize, this.winLength);
     if (w) { this.status.set('won'); this.winner.set(w); return true; }
-    if (checkDraw(this.board())) { this.status.set('draw'); return true; }
+    if (checkDraw(this.boardState())) { this.status.set('draw'); return true; }
     return false;
   }
 
   
-  get size() { return this.n; }
-  get win()  { return this.k; }
+  get size() { return this.boardSize; }
+  get win()  { return this.winLength; }
 }

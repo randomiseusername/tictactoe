@@ -1,6 +1,7 @@
-.container { max-width: 640px; margin: 2rem auto; padding: 0 1rem; }
-h1 { text-align: center; margin-bottom: 1rem; }
-.controls {
-  display: flex; gap: .75rem; justify-content: center; margin-bottom: .5rem;
-}
-.status { text-align: center; font-weight: 600; margin: .5rem 0 1rem; }
+.container { max-width: 680px; margin: 2.5rem auto; padding: 0 1rem; }
+h1 { text-align: center; margin-bottom: 1rem; font-weight: 700; color: var(--accent); }
+.top-card { padding: 1rem; border-radius: 10px; background: var(--glass); margin-bottom: 1rem; }
+.controls { display: flex; gap: .75rem; justify-content: center; margin-bottom: .5rem; }
+.status { text-align: center; font-weight: 600; margin: .5rem 0 1rem; color: var(--muted); }
+
+.footer { text-align: center; font-size: 0.85rem; color: var(--muted); margin-top: 1.25rem; }
